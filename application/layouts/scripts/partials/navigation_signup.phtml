@@ -1,0 +1,63 @@
+<!--menu--->    
+<nav class="navbar  navbar-fixed-top navbar-inverse<?php // if(time()%2) echo "navbar-inverse"; ?>"">
+    <div class="navbar-inner">
+        <div class="container">
+            
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            
+            <a class="brand" href="/profile"></a>
+           
+           
+           <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="divider-vertical"></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-envelope"></i>Messages<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/messages">Inbox</a></li>
+                            <li><a href="/messages/sent">Sent Messages</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="divider-vertical"></li>
+
+                    <form class="navbar-search pull-left" action="">
+                        <input type="text" class="search-query span2-sub" style="width:162px;" placeholder="Search by username">
+                    </form>
+
+                    <li class="divider-vertical"></li>
+                </ul>
+
+                <ul class="nav pull-right">
+                    <li class="divider-vertical"></li>
+
+                    <li style="width:205px;"><a href=""> <i class="icon-glass" style="margin-top:1px;"></i> Welcome, <?php if(isset($this->username[0])) echo htmlentities($this->username[0]); ?></a></li>
+
+                    <li class="divider-vertical"></li>
+
+                    <li class="dropdown">
+                        
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Profile  <b class="caret"></b></a>
+
+                        <ul class="dropdown-menu">
+                            <li><a data-toggle="modal" data-target="#central_modal" href="/profile/update" data-header="Update Profile">Update Profile</a></li>
+                            <li><a data-toggle="modal" data-target="#central_modal" href="/profile/images" data-header="Manage Images">Manage Images</a></li>
+                            <li><a data-toggle="modal" data-target="#central_modal" href="/profile/settings" data-header="Account Settings">Account Settings</a></li>
+                            <li class="divider"></li>
+                            <li><a href="logout">Logout</a></li>
+                        </ul>
+
+                    </li>
+
+                    <li class="divider-vertical"></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+</nav>
+<!--/menu--->    

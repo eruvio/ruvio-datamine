@@ -1,0 +1,21 @@
+<style type="text/css">
+    .progress {
+        margin-bottom: 2px;
+    }
+    .bar {
+        text-overflow: visible;
+    }
+    
+    .bar p {
+        width: 100%;
+    }
+</style>
+<h3> - Number of Transactions: <?php echo $this->numberTransactions; ?></h3>
+<h3> - Support Threshold: <?php echo $this->supportDesired . ' (' . $this->supportDesired*100 . '%)'?></h3>
+<h3> - Minimum Support: <?php echo $this->minimumSupport; ?></h3>
+<hr/>
+<?php
+foreach($this->apriori as $level){
+    echo $this->renderLevel($level);
+}
+?>

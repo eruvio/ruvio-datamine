@@ -1,0 +1,32 @@
+<form action="<?php echo $this->url(array('controller' => 'apriori', 'action' => 'calculate'), null, true); ?>" method="post">
+    <fieldset><br/>
+        <legend>Apriori Calculation:</legend>
+        <label>Desired Minimum Support Level:</label>
+        <input type="text" placeholder="Enter a value between 0 and 1" name="support"> 
+        <input type="submit" value="Calculate" style="margin-top:-8px;" />
+    </fieldset>
+    <fieldset><br/>
+        <legend>Data:</legend>
+        <label>Database: <?php echo $this->db->params->dbname; ?></label>
+        <label>Raw Data:</label>
+        <table class="table table-striped table-hover table-bordered">
+            <tr>
+                <th>Customer Number</th>
+            <?php
+            foreach($this->fields as $value){
+                echo "<th>$value</th>";
+            }
+            ?>
+            </tr>
+            <?php
+            foreach($this->data as $row){
+                echo "<tr>";
+                foreach($row as $value){
+                    echo "<td>$value</td>";
+                }
+                echo "</tr>";
+            }
+            ?>
+        </table>
+    </fieldset>
+</form>

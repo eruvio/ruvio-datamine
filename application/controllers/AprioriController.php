@@ -1,40 +1,38 @@
 <?php
 
-class AprioriController
-    extends Zend_Controller_Action {
+class AprioriController extends Zend_Controller_Action {
 
-    
-    public function indexAction(){
-        if($this->_request->isPost()){
+    public function indexAction() {
+        if ($this->_request->isPost()) {
             $this->forward('calculate');
         }
         $config = Zend_Registry::get('config');
-        $model  = new Application_Model_Apriori();
+        $model = new Application_Model_Apriori();
         $this->view->assign(array(
-           'db' => $config->production->resources->db,
-           'data' => $model->fetchAll(),
-           'fields' => $model->getFields()
+            'db' => $config->production->resources->db,
+            'data' => $model->fetchAll(),
+            'fields' => $model->getFields()
         ));
     }
-    
-    public function calculateAction(){
-        $model   = new Application_Model_Apriori();
+
+    public function calculateAction() {
+        $model = new Application_Model_Apriori();
         $support = $this->getParam('support', .3);
-        
-        $fields  = $model->getFields();
+
+        $fields = $model->getFields();
         $transactions = $model->getTransactionCount();
-        
-        if(!is_numeric($support) || $support <= 0 || $support > 1){
+
+        if (!is_numeric($support) || $support <= 0 || $support > 1) {
             throw new Exception("Invalid Suppot Level Requested");
         }
-        
+
         $threshhold = ceil($support * $transactions);
         $apriori = array();
         $validFields = $fields;
-        
-        for($i=1;$i<=count($validFields);$i++){
-            foreach($this->combinations($validFields, $i) as $k=>$configuration){
-                if($k==0){
+
+        for ($i = 1; $i <= count($validFields); $i++) {
+            foreach ($this->combinations($validFields, $i) as $k => $configuration) {
+                if ($k == 0) {
                     $validFields = array();
                 }
                 $itemset = array(
@@ -43,9 +41,9 @@ class AprioriController
                     'supportRequired' => $threshhold
                 );
                 $apriori['levels'][$i][] = $itemset;
-                if($itemset['support'] >= $itemset['supportRequired']){
-                    foreach($configuration as $item){
-                        if(!in_array($item, $validFields)){
+                if ($itemset['support'] >= $itemset['supportRequired']) {
+                    foreach ($configuration as $item) {
+                        if (!in_array($item, $validFields)) {
                             $validFields[] = $item;
                         }
                     }
@@ -60,99 +58,53 @@ class AprioriController
             'minimumSupport' => $threshhold
         ));
     }
-    
-//    private function combinations(Array $array, $n){
-//        while($n-- > 0){
-//        $return = array();
-//            foreach($array as $k=>$value){
-//                foreach($array as $j=>$v){
-//                    if(@!in_array($v, $return[$k]?:array()) && @count($return[$k]) < $n)
-//                        $return[$k][] = $v;
-//                }
-//            }
-////        }
-//        return $return;
-//        $return = array();
-//        $i = 0;
-//        
-//        die(var_dump($array));    
-        
-//        foreach($array as $k=>$v){
-//            $return[$i] = array($v);
-//            foreach($array as $key=>$value){
-//                
-//                if(count($return[$i]) < $n && !in_array($value, $return[$i])){
-//                    array_push($return[$i], $value);
-//                }
-//            }
-//            $i++;
-//        }
-//        return $return;
-//        
-        
-//        for($i=0;$i<count($array);$i++){
-//            for($j=$i+1;$j<count($array);$j++){
-//                for($z=$j+1;$j<count($array);$z++){
-//                    
-//                }
-//            }
-//        }
-//        
-        
-//    }
-    
-    private function combinations($base,$n){
 
-    $baselen = count($base);
-    if($baselen == 0){
-        return;
-    }
-    
-    if($n == 1){
-        $return = array();
-        foreach($base as $b){
-            $return[] = array($b);
+    private function combinations($base, $n) {
+
+        $baselen = count($base);
+        if ($baselen == 0) {
+            return;
         }
-        return $return;
-    }else{
-        //get one level lower combinations
-        $oneLevelLower = $this->combinations($base,$n-1);
 
-        //for every one level lower combinations add one element to them that the last element of a combination is preceeded by the element which follows it in base array if there is none, does not add
-        $newCombs = array();
+        if ($n == 1) {
+            $return = array();
+            foreach ($base as $b) {
+                $return[] = array($b);
+            }
+            return $return;
+        } else {
+            //get one level lower combinations
+            $oneLevelLower = $this->combinations($base, $n - 1);
 
-        foreach($oneLevelLower as $oll){
+            //for every one level lower combinations add one element to them that the last element of a combination is preceeded by the element which follows it in base array if there is none, does not add
+            $newCombs = array();
 
-            $lastEl = $oll[$n-2];
-            $found = false;
-            foreach($base as  $key => $b){
-                if($b == $lastEl){
-                    $found = true;
-                    continue;
-                    //last element found
+            foreach ($oneLevelLower as $oll) {
 
-                }
-                if($found == true){
+                $lastEl = $oll[$n - 2];
+                $found = false;
+                foreach ($base as $key => $b) {
+                    if ($b == $lastEl) {
+                        $found = true;
+                        continue;
+                        //last element found
+                    }
+                    if ($found == true) {
                         //add to combinations with last element
-                        if($key < $baselen){
+                        if ($key < $baselen) {
 
                             $tmp = $oll;
-                            $newCombination = array_slice($tmp,0);
-                            $newCombination[]=$b;
-                            $newCombs[] = array_slice($newCombination,0);
+                            $newCombination = array_slice($tmp, 0);
+                            $newCombination[] = $b;
+                            $newCombs[] = array_slice($newCombination, 0);
                         }
-
+                    }
                 }
             }
-
         }
 
+        return $newCombs;
     }
 
-    return $newCombs;
-
-
-    }
-    
 }
 

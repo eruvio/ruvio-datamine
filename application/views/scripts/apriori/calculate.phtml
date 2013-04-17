@@ -10,9 +10,14 @@
         width: 100%;
     }
 </style>
-<h3> - Number of Transactions: <?php echo $this->numberTransactions; ?></h3>
-<h3> - Support Threshold: <?php echo $this->supportDesired . ' (' . $this->supportDesired*100 . '%)'?></h3>
-<h3> - Minimum Support: <?php echo $this->minimumSupport; ?></h3>
+<script type="text/javascript">
+    $(document).ready(function(){
+       $('a[data-toggle="tooltip"]').tooltip(); 
+    });
+</script>
+<h4> - Number of Transactions: <?php echo $this->numberTransactions; ?></h4>
+<h4> - Support Threshold: <?php echo $this->supportDesired . ' (' . $this->supportDesired*100 . '%)'?></h4>
+<h4> - Minimum Support: <?php echo $this->minimumSupport; ?></h4>
 <hr/>
 <?php
 foreach($this->apriori as $level){

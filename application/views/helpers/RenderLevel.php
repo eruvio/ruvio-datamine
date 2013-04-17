@@ -15,7 +15,7 @@ class Zend_View_Helper_RenderLevel
         foreach($level as $row){
             $rowClass = 'alert-' . ($row['support'] < $row['supportRequired'] ? 'error' : 'success');
             $html .= '<tr>';
-            $html .= '<td class="' . $rowClass . '">' . implode(', ', $row['fields']) . '</td>';
+            $html .= '<td class="' . $rowClass . '"><a href="#" data-toggle="tooltip" title="' . ($row['query']) . '">' . implode(', ', $row['fields']) . '</a></td>';
             $html .= '<td class="' . $rowClass . '">' . $row['support'] . '</td>';
             $html .= '</tr>';
         }

@@ -4,6 +4,7 @@ class Application_Model_Apriori
     extends Zend_Db_Table_Abstract
 {
     protected $_name = 'cross_selling';
+    public $_lastQuery = null;
     const ACTIVE = 1;
     
     public function getTransactionCount(){
@@ -19,6 +20,11 @@ class Application_Model_Apriori
         foreach($fields as $field){
             $select->where("`$field`=?", self::ACTIVE);
         }
+        $this->_lastQuery = $select->assemble();
         return $this->_db->fetchOne($select);
+    }
+    
+    public function getLastQuery(){
+        return $this->_lastQuery;
     }
 }

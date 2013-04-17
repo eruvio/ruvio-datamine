@@ -38,7 +38,8 @@ class AprioriController extends Zend_Controller_Action {
                 $itemset = array(
                     'fields' => $configuration,
                     'support' => $model->getCardinality($configuration),
-                    'supportRequired' => $threshhold
+                    'supportRequired' => $threshhold,
+                    'query' => $model->getLastQuery()
                 );
                 $apriori['levels'][$i][] = $itemset;
                 if ($itemset['support'] >= $itemset['supportRequired']) {

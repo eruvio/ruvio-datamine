@@ -16,7 +16,8 @@ class ClassifierController extends Zend_Controller_Action {
     }
 
     public function calculateAction() {
-        $categories = $this->getParams('options', array());
+        $categories = array_keys($this->getParam('options', array()));
+        die(var_dump($categories));
         }
     
     public function mongotestsAction(){

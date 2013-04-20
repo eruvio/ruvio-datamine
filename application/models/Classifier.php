@@ -1,6 +1,6 @@
 <?php
 
-class Application_Model_Apriori
+class Application_Model_Classifier
     extends Application_Model_CrossSelling
 {
     public $_lastQuery = null;

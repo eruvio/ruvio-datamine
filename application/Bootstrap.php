@@ -27,4 +27,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->bootstrap('db');
     }
     
+    protected function _initNavigation(){
+        $this->bootstrap('view');
+        $view = $this->getResource('view');
+        $container = include(APPLICATION_PATH . '/configs/navigation.php');
+        $view->navigation(new Zend_Navigation($container));
+    }
+    
 }

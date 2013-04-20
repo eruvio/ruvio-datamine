@@ -1,0 +1,12 @@
+<form action="<?php echo $this->url(array('controller' => 'classifier', 'action' => 'calculate'), null, true); ?>" method="post">
+    <fieldset><br/>
+        <legend>Naive Bayes Classifier:</legend>
+        <label>Select Simulated Purchases:</label>
+        <?php foreach($this->fields as $id=>$field) : ?>
+        <label class="checkbox">
+            <input type="checkbox" name="options[<?php echo $id; ?>]"><?php echo $field; ?> 
+        </label>
+        <?php endforeach; ?>
+        <input type="submit" value="Calculate Optimal Strategy" />   
+    </fieldset>
+</form>

@@ -30,9 +30,13 @@
           </button>
           <a class="brand" href="/apriori">Data Mining - Cross Selling</a>
           <div class="nav-collapse collapse">
-            <ul class="nav">
+<!--            <ul class="nav">
               <li class="active"><a href="/apriori">Apriori</a></li>
-            </ul>
+              <li class="active"><a href="/classifier">Naïve Bayes Classifier</a></li>
+            </ul>-->
+<?php $partial = array('navigation/top.phtml', 'default') ?>
+<?php $this->navigation()->menu()->setPartial($partial) ?>
+<?php echo $this->navigation()->menu()->render() ?>
           </div><!--/.nav-collapse -->
         </div>
       </div>

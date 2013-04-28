@@ -183,6 +183,12 @@ class AprioriController extends Zend_Controller_Action {
 
         return $newCombs;
     }
+    
+    public function clearcacheAction(){
+        apc_clear_cache();
+        apc_clear_cache('user');
+        die('Cache Cleared');
+    }
 
 }
 

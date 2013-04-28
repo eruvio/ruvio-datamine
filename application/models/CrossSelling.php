@@ -20,7 +20,16 @@ class Application_Model_CrossSelling
             $select->where("`$field`=?", self::ACTIVE);
         }
         $this->_lastQuery = $select->assemble();
-        return $this->_db->fetchOne($select);
+        
+        $cacheKey = md5($this->_lastQuery);
+        
+        if($result = apc_fetch($cacheKey)){
+            return $result;
+        }
+        
+        $result = $this->_db->fetchOne($select);
+        apc_store($cacheKey, $result);
+        return $result;
     }
 
 }

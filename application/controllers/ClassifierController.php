@@ -4,11 +4,6 @@ class ClassifierController extends Zend_Controller_Action {
 
     public function indexAction() {
         
-        
-        apc_store('test', 'hello world');
-        
-        die(var_dump(apc_fetch('test')));
-        
         if ($this->_request->isPost()) {
             $this->forward('calculate');
         }

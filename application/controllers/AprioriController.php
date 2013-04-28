@@ -18,7 +18,7 @@ class AprioriController extends Zend_Controller_Action {
         $model = new Application_Model_Apriori();
         $this->view->assign(array(
             'db' => $config->production->resources->db,
-            'data' => $model->fetchAll(),
+            'data' => $model->fetchAll($model->select()->limit(100)),
             'fields' => $model->getFields()
         ));
     }

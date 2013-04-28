@@ -20,7 +20,7 @@ class Zend_View_Helper_RenderAssociationRules
             $html .= '<td>' . implode(', ', $row['x']) . '</td>';
             $html .= '<td>' . implode(', ', $row['y']) . '</td>';
             $html .= '<td>' . $row['support_x'] . ' (' . round($row['support_x']/$this->view->numberTransactions,2)*100 . '%)</td>';
-            $html .= '<td>' . $row['denominator'] . ' (' . round($row['denominator']/$this->view->numberTransactions,2)*100 . '%)</td>';
+            $html .= '<td>' . $row['support_y'] . ' (' . round($row['support_y']/$this->view->numberTransactions,2)*100 . '%)</td>';
             $html .= '<td>' . $row['numerator'] . ' (' . round($row['numerator']/$this->view->numberTransactions,2)*100 . '%)</td>';
             $html .= '<td>' . $row['lift'] . '</td>';
             $html .= '</tr>';

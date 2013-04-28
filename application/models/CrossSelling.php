@@ -23,12 +23,15 @@ class Application_Model_CrossSelling
         
         $cacheKey = md5($this->_lastQuery);
         
-        if($result = apc_fetch($cacheKey)){
-            return $result;
+        if(extension_loaded('APC')){
+            if($result = apc_fetch($cacheKey)){
+                return $result;
+            }
+            $result = $this->_db->fetchOne($select);
+            apc_store($cacheKey, $result);
+        } else {
+            $result = $this->_db->fetchOne($select);
         }
-        
-        $result = $this->_db->fetchOne($select);
-        apc_store($cacheKey, $result);
         return $result;
     }
 

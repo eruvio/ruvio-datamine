@@ -1,6 +1,14 @@
 <?php
 
 class AprioriController extends Zend_Controller_Action {
+    
+    private $_ruleCandidates = array();
+    private $_associationRules = array();
+    
+    public function init() {
+        parent::init();
+        set_time_limit(0);
+    }
 
     public function indexAction() {
         if ($this->_request->isPost()) {
@@ -18,6 +26,7 @@ class AprioriController extends Zend_Controller_Action {
     public function calculateAction() {
         $model = new Application_Model_Apriori();
         $support = $this->getParam('support', .3);
+        $minCofidence = $this->getParam('minConfidence', .75);
 
         $fields = $model->getFields();
         $transactions = $model->getTransactionCount();
@@ -41,25 +50,93 @@ class AprioriController extends Zend_Controller_Action {
                     'supportRequired' => $threshhold,
                     'query' => $model->getLastQuery()
                 );
+             
+                // Add itemset to scan
                 $apriori['levels'][$i][] = $itemset;
+                
                 if ($itemset['support'] >= $itemset['supportRequired']) {
+                    // Repopulate necessary fields
                     foreach ($configuration as $item) {
                         if (!in_array($item, $validFields)) {
                             $validFields[] = $item;
                         }
                     }
+                    
+                    // Append to the association rule array
+                    if(count($configuration) > 1){
+                        $this->_ruleCandidates[] = $itemset;
+                    }
                 }
             }
         }
-
+                
+        $this->generateAssociationRules();
+        
         $this->view->assign(array(
             'apriori' => $apriori['levels'],
+            'associationRules' => $this->_associationRules,
             'numberTransactions' => $transactions,
             'supportDesired' => $support,
-            'minimumSupport' => $threshhold
+            'minimumSupport' => $threshhold,
+            'minimumConfidence' => $minCofidence
         ));
     }
+    
+    private function generateAssociationRules(){
+        
+        $hashTable = array();
+        $model = new Application_Model_Apriori();
+        $transactions = $model->getTransactionCount();
 
+        foreach($this->_ruleCandidates as $id=>$data){
+            foreach($data['fields'] as $k=>$value){
+                $dataClone = $data['fields'];
+                unset($dataClone[$k]);
+                $dataClone = array_values($dataClone);
+                $rule = array(
+                    'x' => array($value),
+                    'y' => $dataClone
+                );
+                $hashKey = md5(json_encode($rule));
+                if(!array_key_exists($hashKey, $hashTable)){
+                    $hashTable[$hashKey] = $rule;
+                }
+
+                // Reverse rule
+                $rule = array(
+                    'x' => $dataClone,
+                    'y' => array($value)
+                );
+                $hashKey = md5(json_encode($rule));
+                if(!array_key_exists($hashKey, $hashTable)){
+                    $hashTable[$hashKey] = $rule;
+                }
+            }
+        }
+        
+        // Clean up hash table
+        $hashTable = array_values($hashTable);
+        
+        foreach($hashTable as &$rule){
+            $numerator = array_merge($rule['x'], $rule['y']);
+            $denominator = $rule['x'];
+
+            // Get cardinality
+            $numerator = $model->getCardinality($numerator);
+
+            $denominator = $model->getCardinality($denominator);
+
+            $rule['support_x'] = $model->getCardinality($rule['x']);
+            $rule['support_y'] = $model->getCardinality($rule['y']);
+            $rule['numerator'] = $numerator;
+            $rule['denominator'] = $denominator;
+            $rule['confidence'] = $numerator/$denominator;
+            $rule['lift'] = round(($rule['numerator']/$transactions)/(($rule['support_y']/$transactions) * ($rule['support_x']/$transactions)),3);
+        }
+
+        $this->_associationRules = $hashTable;
+    }
+    
     private function combinations($base, $n) {
 
         $baselen = count($base);

@@ -19,11 +19,6 @@ class ClassifierController extends Zend_Controller_Action {
         $categories = array_keys($this->getParam('options', array()));
         die(var_dump($categories));
         }
-    
-    public function mongotestsAction(){
-//        $connection = new MongoClient();
-    }
-
 
 }
 

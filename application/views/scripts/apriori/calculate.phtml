@@ -11,7 +11,6 @@
     }
     .dataTables_filter {
         float: right;
-        margin-top: -36px !important;
     }
 </style>
 <script type="text/javascript">
@@ -20,8 +19,9 @@
        $('#associationRules').dataTable(
         {
             "iDisplayLength": -1,
-            "sDom": '<"top"f<"clear">>rt<"bottom"i<"clear">>'
+            "sDom": 'frt<"bottom"i<"clear">>'
         });
+       $('<h2 style="position:absolute;">Association Rules</h2>').insertBefore('.dataTables_filter');
     });
 </script>
 <h4> - Number of Transactions: <?php echo $this->numberTransactions; ?></h4>
@@ -34,7 +34,9 @@
 foreach($this->apriori as $level){
     echo $this->renderLevel($level);
 }
-
+?>
+<br/><br/>
+<?php
 echo $this->renderAssociationRules($this->associationRules, $this->minimumConfidence);
 
 ?>

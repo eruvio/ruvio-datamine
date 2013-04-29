@@ -9,7 +9,7 @@ class Zend_View_Helper_RenderAssociationRules
      */
     public function renderAssociationRules(Array $rules, $minConfidence) {
         static $i=1;
-        $html = '<hr/><fieldset><legend>Association Rules:</legend>';
+        $html = '';
         $html .= '<table id="associationRules" class="table table-bordered table-hover">';
         $html .= '<thead><tr><th>Rule #</th><th>Confidence %</th><th>X</th><th>Y</th><th>Support (x)</th><th>Support (y)</th><th>Support (XUY)</th><th>Lift</th></tr></thead>';
         foreach($rules as $row){

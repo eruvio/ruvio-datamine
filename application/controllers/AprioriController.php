@@ -23,10 +23,6 @@ class AprioriController extends Zend_Controller_Action {
     }
 
     public function calculateAction() {
-                die(ini_get('memory_limit'));
-
-
-        
         $model = new Application_Model_Apriori();
         $support = $this->getParam('support', .3);
         $minCofidence = $this->getParam('minConfidence', .75);

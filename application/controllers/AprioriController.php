@@ -23,8 +23,8 @@ class AprioriController extends Zend_Controller_Action {
     }
 
     public function calculateAction() {
-        
-        Zend_Controller_Front::getInstance()->setParam('disableOutputBuffering', true);
+                die(ini_get('memory_limit'));
+
 
         
         $model = new Application_Model_Apriori();

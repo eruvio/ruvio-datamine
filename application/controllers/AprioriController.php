@@ -4,11 +4,9 @@ class AprioriController extends Zend_Controller_Action {
     
     private $_ruleCandidates = array();
     private $_associationRules = array();
-    
+        
     public function init() {
-        parent::init();
-        set_time_limit(0);
-        ini_set('memory_limit', '512M');        
+        parent::init();   
     }
 
     public function indexAction() {
@@ -25,6 +23,10 @@ class AprioriController extends Zend_Controller_Action {
     }
 
     public function calculateAction() {
+        
+        Zend_Controller_Front::getInstance()->setParam('disableOutputBuffering', true);
+
+        
         $model = new Application_Model_Apriori();
         $support = $this->getParam('support', .3);
         $minCofidence = $this->getParam('minConfidence', .75);
@@ -73,6 +75,8 @@ class AprioriController extends Zend_Controller_Action {
                 
         $this->generateAssociationRules();
         
+//        die(var_dump($this->_associationRules));
+        
         $this->view->assign(array(
             'apriori' => $apriori['levels'],
             'associationRules' => $this->_associationRules,
@@ -86,10 +90,12 @@ class AprioriController extends Zend_Controller_Action {
     private function generateAssociationRules(){
         
         $hashTable = array();
-        foreach($this->_ruleCandidates as $itemset){
+        foreach($this->_ruleCandidates as $k=>$itemset){
             $hashTable = array_merge($hashTable, $this->_iterateRules($itemset['fields']));
+            unset($this->_ruleCandidates[$k]);
         }
         
+        unset($this->_ruleCandidates);
         
         $model = new Application_Model_Apriori();
         $transactions = $model->getTransactionCount();
@@ -189,4 +195,3 @@ class AprioriController extends Zend_Controller_Action {
     }
 
 }
-

@@ -23,10 +23,11 @@ class AprioriController extends Zend_Controller_Action {
     }
 
     public function calculateAction() {
-        $model = new Application_Model_Apriori();
         $support = $this->getParam('support', .3);
         $minCofidence = $this->getParam('minConfidence', .75);
-
+        $dataset = $this->getParam('dataset', SET_RAW);
+        $model = new Application_Model_Apriori(array('table'=>$dataset));        
+        
         $fields = $model->getFields();
         $transactions = $model->getTransactionCount();
 

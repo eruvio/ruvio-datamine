@@ -34,4 +34,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->navigation(new Zend_Navigation($container));
     }
     
+    protected function _initConstants(){
+        define('SET_RAW', 'cross_selling');
+        define('SET_PREPROCESSED', 'cross_selling_preprocessed');
+    }
+    
 }

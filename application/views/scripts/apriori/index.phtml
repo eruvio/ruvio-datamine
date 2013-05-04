@@ -5,7 +5,12 @@
             <input type="text" placeholder="Default: .3" name="support"> 
         <label>Desired Minimum Confidence Level:</label>
             <input type="text" placeholder="Default: .75" name="minConfidence"> 
-        <input type="submit" value="Calculate" style="margin-top:-8px;" />
+        <label>Data Set:</label>
+            <select name="dataset">
+                <option value="<?php echo SET_PREPROCESSED; ?>">Preprocessed</option>
+                <option value="<?php echo SET_RAW; ?>">Raw Data</option>
+            </select>
+        <input type="submit" value="Calculate" class="btn btn-primary" style="margin-top:-8px;" />
     </fieldset>
     <fieldset><br/>
         <legend>Data:</legend>

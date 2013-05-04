@@ -6,6 +6,16 @@ class Application_Model_CrossSelling
     protected $_name = 'cross_selling';
     const ACTIVE = 1;
     
+    public function __construct($config = array()) {
+        $this->_name = isset($config['table']) ? $config['table'] :  SET_RAW;
+        
+        if($this->_name != SET_RAW && $this->_name != SET_PREPROCESSED){
+            throw new Exception("Illegal dataset in " . __CLASS__);
+        }
+        
+        parent::__construct($config);
+    }
+    
     public function getTransactionCount(){
         return $this->_db->fetchOne("select count(0) from " . $this->_name);
     }
@@ -21,7 +31,7 @@ class Application_Model_CrossSelling
         }
         $this->_lastQuery = $select->assemble();
         
-        $cacheKey = md5($this->_lastQuery);
+        $cacheKey = md5($this->_lastQuery . '_table_' . $this->_name);
         
         if(extension_loaded('APC')){
             if($result = apc_fetch($cacheKey)){

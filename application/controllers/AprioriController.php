@@ -85,37 +85,13 @@ class AprioriController extends Zend_Controller_Action {
     private function generateAssociationRules(){
         
         $hashTable = array();
-        $model = new Application_Model_Apriori();
-        $transactions = $model->getTransactionCount();
-
-        foreach($this->_ruleCandidates as $id=>$data){
-            foreach($data['fields'] as $k=>$value){
-                $dataClone = $data['fields'];
-                unset($dataClone[$k]);
-                $dataClone = array_values($dataClone);
-                $rule = array(
-                    'x' => array($value),
-                    'y' => $dataClone
-                );
-                $hashKey = md5(json_encode($rule));
-                if(!array_key_exists($hashKey, $hashTable)){
-                    $hashTable[$hashKey] = $rule;
-                }
-
-                // Reverse rule
-                $rule = array(
-                    'x' => $dataClone,
-                    'y' => array($value)
-                );
-                $hashKey = md5(json_encode($rule));
-                if(!array_key_exists($hashKey, $hashTable)){
-                    $hashTable[$hashKey] = $rule;
-                }
-            }
+        foreach($this->_ruleCandidates as $itemset){
+            $hashTable = array_merge($hashTable, $this->_iterateRules($itemset['fields']));
         }
         
-        // Clean up hash table
-        $hashTable = array_values($hashTable);
+        
+        $model = new Application_Model_Apriori();
+        $transactions = $model->getTransactionCount();
         
         foreach($hashTable as &$rule){
             $numerator = array_merge($rule['x'], $rule['y']);
@@ -137,6 +113,27 @@ class AprioriController extends Zend_Controller_Action {
         $this->_associationRules = $hashTable;
     }
     
+    private function _iterateRules(Array $itemset){
+        
+        $rules = array();
+        foreach($itemset as $k=>$v){
+            $itemsetClone = $itemset;
+            unset($itemsetClone[$k]);
+            for($i=1;$i<count($itemset);$i++){
+                foreach($this->combinations($itemset, $i) as $combo){
+                    $key = md5(json_encode($combo));
+                    if(!array_key_exists($key, $rules)){
+                        $rules[$key] = array(
+                            'x' => $combo,
+                            'y' => array_diff($itemset, $combo)
+                        );
+                    }
+                }
+            }
+        }
+        return array_values($rules);
+    }
+
     private function combinations($base, $n) {
 
         $baselen = count($base);

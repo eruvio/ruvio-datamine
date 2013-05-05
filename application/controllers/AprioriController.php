@@ -70,10 +70,9 @@ class AprioriController extends Zend_Controller_Action {
             }
         }
                 
-        $this->generateAssociationRules();
-        
-//        die(var_dump($this->_associationRules));
-        
+        // Generate association rules
+        $this->generateAssociationRules($dataset);
+
         $this->view->assign(array(
             'apriori' => $apriori['levels'],
             'associationRules' => $this->_associationRules,
@@ -84,7 +83,7 @@ class AprioriController extends Zend_Controller_Action {
         ));
     }
     
-    private function generateAssociationRules(){
+    private function generateAssociationRules($dataset = SET_RAW){
         
         $hashTable = array();
         foreach($this->_ruleCandidates as $k=>$itemset){
@@ -94,16 +93,15 @@ class AprioriController extends Zend_Controller_Action {
         
         unset($this->_ruleCandidates);
         
-        $model = new Application_Model_Apriori();
+        $model = new Application_Model_Apriori(array('table' => $dataset));
         $transactions = $model->getTransactionCount();
-        
+                
         foreach($hashTable as &$rule){
             $numerator = array_merge($rule['x'], $rule['y']);
             $denominator = $rule['x'];
 
             // Get cardinality
             $numerator = $model->getCardinality($numerator);
-
             $denominator = $model->getCardinality($denominator);
 
             $rule['support_x'] = $model->getCardinality($rule['x']);

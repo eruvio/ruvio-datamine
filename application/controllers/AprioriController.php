@@ -184,8 +184,18 @@ class AprioriController extends Zend_Controller_Action {
     }
     
     public function clearcacheAction(){
-        apc_clear_cache();
-        apc_clear_cache('user');
+        
+        // Clear APC cache
+        if(extension_loaded('APC')){
+            apc_clear_cache();
+            apc_clear_cache('user');
+        }
+        
+        // Clear page cache
+        $cache = Datamine_Cache::getInstance();
+        $cache->cancel();
+        $cache->clean();
+        
         die('Cache Cleared');
     }
 

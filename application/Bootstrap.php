@@ -4,7 +4,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
     protected function _initAutoload() {
 	$loader = Zend_Loader_Autoloader::getInstance();
-	$loader->registerNamespace('Sparx_');
+	$loader->registerNamespace('Datamine_');
     }
     protected function _initDoctype(){
         $this->bootstrap('view');
@@ -37,6 +37,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initConstants(){
         define('SET_RAW', 'cross_selling');
         define('SET_PREPROCESSED', 'cross_selling_preprocessed');
+    }
+    
+    protected function _initPlugins(){
+        $frontController = Zend_Controller_Front::getInstance();
+        $frontController->registerPlugin(new Datamine_Plugins_Cache());
     }
     
 }

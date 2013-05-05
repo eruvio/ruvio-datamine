@@ -14,7 +14,8 @@ class Datamine_Cache {
         
         if(!self::$_cache){
             $backendOptions = array(
-                'cache_dir' => APPLICATION_PATH . '/cache'
+                'cache_dir' => APPLICATION_PATH . '/cache',
+                'lifetime'  => null
             );
             self::$_cache = Zend_Cache::factory('Page', 'File', array(), $backendOptions);
         }

@@ -15,6 +15,7 @@
       }
     </style>
     <script src="../assets/js/jquery-1.91.min.js"></script>
+    <link href="../assets/css/table.css" rel="stylesheet">
     <link href="../assets/css/bootstrap-responsive.min.css" rel="stylesheet">
   </head>
 
@@ -30,10 +31,6 @@
           </button>
           <a class="brand" href="/apriori">Data Mining - Cross Selling</a>
           <div class="nav-collapse collapse">
-<!--            <ul class="nav">
-              <li class="active"><a href="/apriori">Apriori</a></li>
-              <li class="active"><a href="/classifier">Naïve Bayes Classifier</a></li>
-            </ul>-->
 <?php $partial = array('navigation/top.phtml', 'default') ?>
 <?php $this->navigation()->menu()->setPartial($partial) ?>
 <?php echo $this->navigation()->menu()->render() ?>
@@ -51,5 +48,6 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="../assets/js/bootstrap.min.js"></script>
     <script src="../assets/js/jquery.dataTables.min.js"></script>
+    <script src="../assets/js/table.js"></script>
   </body>
 </html>

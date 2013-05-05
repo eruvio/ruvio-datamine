@@ -13,6 +13,9 @@
         float: right;
         margin-top: 25px;
     }
+    .paging_bootstrap {
+        margin-top: -20px !important;
+    }
 </style>
 <script type="text/javascript">
     $(document).ready(function(){
@@ -92,7 +95,11 @@
                 { "sType": "natural" },
                 null
             ],
-            "sDom": 'lrt<"bottom"i<"clear">>'
+            "sDom": 'lrt<"bottom"i<"clear">p>',
+            		"sPaginationType": "bootstrap",
+		"oLanguage": {
+			"sLengthMenu": "_MENU_ records per page"
+		}
         });
         $('<h2 style="float:left;">Association Rules</h2>').insertBefore('.dataTables_length');
 

@@ -16,5 +16,6 @@ return  array(
         'label'      => 'Naive Bayes Classifier',
         'controller' => 'classifier',
         'action'     => 'index',
+        'visible'    => false
     )
 );

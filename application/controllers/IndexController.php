@@ -6,6 +6,8 @@ class IndexController
     
     public function indexAction()
     {
+        $cache = Datamine_Cache::getInstance();
+        $cache->cancel();
         $this->redirect($this->view->url(array('controller'=>'apriori')));
     }
     
